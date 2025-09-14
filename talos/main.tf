@@ -1,14 +1,13 @@
 resource "talos_machine_secrets" "this" {}
 
 locals {
-  config_patches = [
+  config_patches = concat([
     file("patch/no-cni-proxy.yaml"),
     file("patch/local-mount.yaml"),
     file("patch/unrestricted-namespace.yaml"),
     file("patch/name-server.yaml"),
-    file("patch/authentication.yaml"),
-    file("patch/single-node.yaml")
-  ]
+    file("patch/authentication.yaml")
+  ], length(var.worker_ips) == 0 ? [file("patch/single-node.yaml")] : [])
   cluster_endpoint = "https://${var.controller_endpoint}:6443"
 }
 
