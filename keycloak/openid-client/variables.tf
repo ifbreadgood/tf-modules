@@ -50,9 +50,9 @@ variable "oauth2_device_authorization_grant_enabled" {
 
 variable "pkce_code_challenge_method" {
   type    = string
-  default = "S256"
+  default = null
   validation {
-    condition     = contains(["S256", "plain"], var.pkce_code_challenge_method)
+    condition     = var.pkce_code_challenge_method == null || contains(["S256", "plain"], var.pkce_code_challenge_method)
     error_message = "valid values are S256 and plain"
   }
 }

@@ -23,6 +23,13 @@ resource "keycloak_openid_client" "this" {
   web_origins                     = concat([var.root_url], var.web_origins)
   root_url                        = var.root_url
   base_url                        = var.base_url
+
+  lifecycle {
+    precondition {
+      condition = var.pkce_code_challenge_method == null || (var.pkce_code_challenge_method != null && var.access_type == "PUBLIC")
+      error_message = "If pkce code challenge is not null, then access type must be public"
+    }
+  }
 }
 
 # resource "keycloak_openid_client_service_account_role" "this" {
